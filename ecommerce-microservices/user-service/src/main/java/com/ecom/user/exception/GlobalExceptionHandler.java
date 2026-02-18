@@ -2,6 +2,7 @@ package com.ecom.user.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -29,6 +30,18 @@ public class GlobalExceptionHandler {
 
         Map<String, Object> response = Map.of(
                 "error", "Already Exists",
+                "message", e.getMessage()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException e) {
+
+        Map<String, Object> response = Map.of(
+                "error", "Validation Failed",
                 "message", e.getMessage()
         );
 
