@@ -5,10 +5,8 @@ import com.ecom.user.dto.LoginResponseDto;
 import com.ecom.user.dto.UserCreatedRequestDto;
 import com.ecom.user.dto.UserResponseDto;
 import com.ecom.user.entity.Users;
-import com.ecom.user.exception.UserAllreadyExistException;
 import com.ecom.user.repository.UserRepository;
 import com.ecom.user.services.IUserService;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 @Service
