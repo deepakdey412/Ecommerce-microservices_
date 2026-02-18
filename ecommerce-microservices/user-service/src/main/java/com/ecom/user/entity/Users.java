@@ -21,9 +21,9 @@ public class Users {
     private String name;
 
     @Column(nullable = false, unique = true)
+    private String email;
     private String password;
     @Column(nullable = false, unique = true)
-    private String email;
     private String phone;
     private String role;
     private Instant createdAt;
