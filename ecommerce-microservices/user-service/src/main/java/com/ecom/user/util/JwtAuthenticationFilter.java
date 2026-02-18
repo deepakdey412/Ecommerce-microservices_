@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
-public class JwtAuthentication extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    public JwtAuthentication(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
