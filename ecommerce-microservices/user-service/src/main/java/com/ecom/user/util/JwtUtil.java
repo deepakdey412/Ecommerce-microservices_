@@ -28,21 +28,21 @@ public class JwtUtil {
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .subject(String.valueOf(userId))
                 .claim("email", email)
                 .claim("role", role)
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + jwtExpirationInMs))
+                .issuedAt(new Date(now))
+                .expiration(new Date(now + jwtExpirationInMs))
                 .signWith(key)
                 .compact();
     }
 
     public Claims validateToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
+        return Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public Long getUserIdFromToken(String token) {
