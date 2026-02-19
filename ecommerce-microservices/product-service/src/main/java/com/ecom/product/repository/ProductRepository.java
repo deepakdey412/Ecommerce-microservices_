@@ -20,4 +20,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "OR LOWER(p.productDescription) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Product> searchProducts(@Param("keyword") String keyword, Pageable pageable);
 
+    @Query("SELECT p FROM Product p " +
+            "WHERE (:keyword IS NULL OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "AND (:categoryId IS NULL OR p.productCategory.id = :categoryId) " +
+            "AND (:minPrice IS NULL OR :maxPrice IS NULL OR p.productPrice BETWEEN :minPrice AND :maxPrice)")
+    Page<Product> advanceFilter(
+            @Param("keyword") String keyword,
+            @Param("categoryId") Long categoryId,
+            @Param("minPrice") Double minPrice,
+            @Param("maxPrice") Double maxPrice,
+            Pageable pageable
+    );
+
 }
