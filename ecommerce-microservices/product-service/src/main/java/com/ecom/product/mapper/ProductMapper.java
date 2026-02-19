@@ -18,7 +18,7 @@ public class ProductMapper {
                 .quantity(product.getProdutQuantity())
                 .brand(product.getProductBrand())
                 .imageUrl(product.getProductImageURL())
-                .categoryId((long) product.getProductCategory().getId())
+                .categoryId(product.getProductCategory().getId())
                 .build();
     }
 

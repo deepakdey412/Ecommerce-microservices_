@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 public class CategoryDto {
 
-    private Integer id;
+    private Long id;
     private String categoryName;
     private String categoryDescription;
     private Long parentId;
