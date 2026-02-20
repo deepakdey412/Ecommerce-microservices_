@@ -6,7 +6,6 @@ import com.ecom.product.entity.Product;
 import com.ecom.product.mapper.ProductMapper;
 import com.ecom.product.repository.ProductRepository;
 import com.ecom.product.services.IProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

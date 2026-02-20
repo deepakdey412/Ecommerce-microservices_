@@ -6,6 +6,7 @@ import com.ecom.product.services.IProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -98,6 +99,17 @@ public class ProductController {
                 );
 
         return ResponseEntity.ok(products);
+    }
+
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<ProductDto> uploadImage(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file
+    ) {
+
+        ProductDto updatedProduct = productService.uploadImage(id, file);
+
+        return ResponseEntity.ok(updatedProduct);
     }
 
 }
