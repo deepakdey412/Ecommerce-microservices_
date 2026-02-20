@@ -14,8 +14,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements IProductService {
@@ -71,28 +77,72 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDto uploadImage(Long id , MultipartFile file) {
-        Product foundProduct = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found with this id : "+ id));
+    public ProductDto uploadImage(Long id, MultipartFile file) {
 
-        if (file.isEmpty()){
+        // ✅ Check product exists
+        Product product = productRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Product not found with id: " + id));
+
+        // ✅ Check file empty
+        if (file == null || file.isEmpty()) {
             throw new RuntimeException("Image file is empty");
         }
 
-        long imageFileSize = 2*1024*1024;
-
-        if (file.getSize()>imageFileSize){
-            throw new RuntimeException("Image file is too large , must be 2MB");
-        }
-        List<String> allowedExtensions = Arrays.asList("image/jpg", "image/png");
-
-        if (!allowedExtensions.contains(file.getContentType())){
-            throw new RuntimeException("Image file is not allowed");
+        // ✅ File size check (2MB)
+        long maxSize = 2 * 1024 * 1024;
+        if (file.getSize() > maxSize) {
+            throw new RuntimeException("Image size must be less than 2MB");
         }
 
-        String fileName = file.getOriginalFilename();
-        String extension = fileName.substring(fileName.lastIndexOf("."));
+        try {
 
-        return null;
+            String originalName = file.getOriginalFilename();
+
+            if (originalName == null || !originalName.contains(".")) {
+                throw new RuntimeException("Invalid file name");
+            }
+
+            // ✅ Extract extension
+            String ext = originalName
+                    .substring(originalName.lastIndexOf(".") + 1)
+                    .toLowerCase();
+
+            // ✅ Validate extension
+            List<String> allowedExt = List.of("jpg", "jpeg", "png");
+
+            if (!allowedExt.contains(ext)) {
+                throw new RuntimeException("Invalid image extension");
+            }
+
+            // ✅ Create folder if not exists
+            String uploadDir = "uploads/products/";
+            File folder = new File(uploadDir);
+
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            // ✅ Generate unique filename
+            String fileName = UUID.randomUUID().toString() + "." + ext;
+
+            Path filePath = Paths.get(uploadDir + fileName);
+
+            // ✅ Save file
+            Files.write(filePath, file.getBytes());
+
+            // ✅ Set image URL in product
+            String imageUrl = "/products/images/" + fileName;
+
+            product.setProductImageURL(imageUrl);
+
+            Product savedProduct = productRepository.save(product);
+
+            return productMapper.toDto(savedProduct);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image", e);
+        }
     }
 
     @Override
