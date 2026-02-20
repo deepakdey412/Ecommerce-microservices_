@@ -36,16 +36,13 @@ public class CategoryService implements ICategoryService {
         return categoryMapper.toDto(savedCategory);
     }
 
-    // ✅ UPDATE
     @Override
-    public CategoryDto update(CategoryDto categoryDto) {
+    public CategoryDto update(Long id  , CategoryDto categoryDto) {
 
-        // 🔥 Check category exists
-        Category existingCategory = categoryRepository.findById(categoryDto.getId())
+        Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found with id: "
                         + categoryDto.getId()));
 
-        // 🔥 Check duplicate name (if changed)
         if (!existingCategory.getCategoryName().equals(categoryDto.getCategoryName())
                 && categoryRepository.existsByName(categoryDto.getCategoryName())) {
 
