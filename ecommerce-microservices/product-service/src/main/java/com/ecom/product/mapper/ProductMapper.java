@@ -3,10 +3,12 @@ package com.ecom.product.mapper;
 import com.ecom.product.dto.ProductDto;
 import com.ecom.product.entity.Product;
 import com.ecom.product.entity.Category;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProductMapper {
 
-    public static ProductDto toDto(Product product) {
+    public ProductDto toDto(Product product) {
         if (product == null) return null;
 
         return ProductDto.builder()
@@ -22,7 +24,7 @@ public class ProductMapper {
                 .build();
     }
 
-    public static Product toEntity(ProductDto dto, Category category) {
+    public Product toEntity(ProductDto dto, Category category) {
         if (dto == null) return null;
 
         return Product.builder()
