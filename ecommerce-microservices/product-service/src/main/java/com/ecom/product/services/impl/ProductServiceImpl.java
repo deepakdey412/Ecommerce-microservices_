@@ -12,6 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ProductServiceImpl implements IProductService {
@@ -64,6 +68,31 @@ public class ProductServiceImpl implements IProductService {
     public ProductDto getProductById(Long id) {
         Product foundProduct = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found with this id : "+ id));
         return productMapper.toDto(foundProduct);
+    }
+
+    @Override
+    public ProductDto uploadImage(Long id , MultipartFile file) {
+        Product foundProduct = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found with this id : "+ id));
+
+        if (file.isEmpty()){
+            throw new RuntimeException("Image file is empty");
+        }
+
+        long imageFileSize = 2*1024*1024;
+
+        if (file.getSize()>imageFileSize){
+            throw new RuntimeException("Image file is too large , must be 2MB");
+        }
+        List<String> allowedExtensions = Arrays.asList("image/jpg", "image/png");
+
+        if (!allowedExtensions.contains(file.getContentType())){
+            throw new RuntimeException("Image file is not allowed");
+        }
+
+        String fileName = file.getOriginalFilename();
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+
+        return null;
     }
 
     @Override
