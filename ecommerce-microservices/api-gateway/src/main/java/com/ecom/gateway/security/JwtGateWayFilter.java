@@ -55,9 +55,13 @@ public class JwtGateWayFilter implements GatewayFilter, Ordered {
             return unauthorized(exchange);
         }
 
+        String role = jwtUtil.getRoleFromToken(token);
+        if (!isAutherization(role , path , method )){
+            return forbidden(exchange);
+        }
         // ✅ Extract user info from token
         String userId = jwtUtil.getUserIdFromToken(token);
-        String role = jwtUtil.getRoleFromToken(token);
+
 
         // ✅ Add headers to downstream services
         var modifiedRequest = exchange.getRequest()
@@ -104,5 +108,10 @@ public class JwtGateWayFilter implements GatewayFilter, Ordered {
             return false;
         }
         return allowedPermission.stream().anyMatch(path::startsWith);
+    }
+
+    private Mono<Void> forbidden(ServerWebExchange exchange) {
+        exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+        return exchange.getResponse().setComplete();
     }
 }
