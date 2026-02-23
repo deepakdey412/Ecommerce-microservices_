@@ -17,8 +17,6 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-
-    // ✅ Place Order
     @PostMapping
     public ResponseEntity<OrderResponseDto> placeOrder(@Valid @RequestBody OrderRequestdto dto) {
 
