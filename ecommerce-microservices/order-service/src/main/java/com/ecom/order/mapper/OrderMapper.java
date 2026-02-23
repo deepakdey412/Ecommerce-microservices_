@@ -3,12 +3,13 @@ package com.ecom.order.mapper;
 import com.ecom.order.dto.OrderRequestdto;
 import com.ecom.order.dto.OrderResponseDto;
 import com.ecom.order.entity.Order;
+import org.springframework.stereotype.Component;
 
-import java.util.UUID;
 
+@Component
 public class OrderMapper {
 
-    public static Order toEntity(OrderRequestdto dto) {
+    public  Order toEntity(OrderRequestdto dto) {
 
         Order order = new Order();
 
@@ -18,7 +19,7 @@ public class OrderMapper {
 
         return order;
     }
-    public static OrderResponseDto toResponseDto(Order order) {
+    public  OrderResponseDto toResponseDto(Order order) {
 
         return new OrderResponseDto(
                 order.getOrderNumber(),
