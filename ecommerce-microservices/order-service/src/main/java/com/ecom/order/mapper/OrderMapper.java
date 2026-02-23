@@ -8,7 +8,6 @@ import java.util.UUID;
 
 public class OrderMapper {
 
-    // 🔹 DTO → Entity
     public static Order toEntity(OrderRequestdto dto) {
 
         Order order = new Order();
@@ -19,8 +18,6 @@ public class OrderMapper {
 
         return order;
     }
-
-    // 🔹 Entity → Response DTO
     public static OrderResponseDto toResponseDto(Order order) {
 
         return new OrderResponseDto(
